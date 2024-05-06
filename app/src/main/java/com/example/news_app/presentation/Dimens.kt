@@ -7,6 +7,8 @@ object Dimens {
     val MediumPadding2 = 30.dp
 
     val indicatorSize = 14.dp
+
+    val pageIndicatorWidth = 52.dp
 }
 
 // package com.example.news_app.presentation.onboarding.components
