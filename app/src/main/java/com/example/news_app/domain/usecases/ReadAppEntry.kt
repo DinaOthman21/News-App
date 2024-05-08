@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
     private val localUserManager: localUserManager
 ) {
 
-    suspend operator fun invoke(): Flow<Boolean> {
+    operator fun invoke(): Flow<Boolean> {
         return localUserManager.readAppEntry()
     }
 
