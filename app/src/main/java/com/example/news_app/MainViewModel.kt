@@ -2,7 +2,7 @@ package com.example.news_app
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.news_app.domain.usecases.AppEntryUseCase
+import com.example.news_app.domain.usecases.app_entry.AppEntryUseCase
 import javax.inject.Inject
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
