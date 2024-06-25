@@ -23,6 +23,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.paging.LoadState
 import com.example.news_app.R
 import com.example.news_app.presentation.Dimens.MediumPadding1
 import com.example.news_app.presentation.common.ArticlesList
@@ -96,6 +97,7 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(MediumPadding1))
 
+
         ArticlesList(
             modifier = Modifier.padding(horizontal = MediumPadding1),
             articles = articles,
@@ -103,6 +105,25 @@ fun HomeScreen(
                 navigate(Route.DetailsScreen.route)
             }
         )
+
+        when (articles.loadState.refresh) {
+            is LoadState.Loading -> {
+                Text(text = "Loading...")
+            }
+            is LoadState.Error -> {
+                val e = articles.loadState.refresh as LoadState.Error
+                Text(text = "Error: ${e.error.localizedMessage}")
+            }
+            else -> {
+                ArticlesList(
+                    modifier = Modifier.padding(horizontal = MediumPadding1),
+                    articles = articles,
+                    onClick = {
+                        navigate(Route.DetailsScreen.route)
+                    }
+                )
+            }
+        }
 
 
     }
