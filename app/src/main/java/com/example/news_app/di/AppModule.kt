@@ -1,6 +1,7 @@
 package com.example.news_app.di
 
 import android.app.Application
+import androidx.room.Room
 import com.example.news_app.data.manager.localUserManagerImpl
 import com.example.news_app.data.remote.dto.NewsApi
 import com.example.news_app.data.repository.NewsRepositoryImpl
@@ -70,6 +71,7 @@ object AppModule {
             searchNews = SearchNews(newsRepository)
         )
     }
+
 
 
 }
