@@ -1,64 +1,61 @@
 package com.example.news_app.presentation.home
 
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.paging.compose.LazyPagingItems
-import com.example.news_app.domain.model.Article
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.paging.LoadState
 import com.example.news_app.R
 import com.example.news_app.presentation.Dimens.MediumPadding1
-import com.example.news_app.presentation.common.ArticlesList
 import com.example.news_app.presentation.common.SearchBar
 import com.example.news_app.presentation.navigation.Screens
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import com.example.news_app.presentation.common.ArticlesList
 
-@OptIn(ExperimentalFoundationApi::class)
+
 @Composable
 fun HomeScreen(
-    articles: LazyPagingItems<Article>,
-    navigate:(String) -> Unit)
-{
+    homeViewModel: ArticleListViewModel,
+    navigate: (String) -> Unit
+) {
 
+    val articleState =homeViewModel.articleListState.collectAsState().value
+    val articles = articleState.articleList
 
-    val titles by remember {
+    val titles by remember(articles) {
         derivedStateOf {
-            if (articles.itemCount > 10) {
-                articles.itemSnapshotList.items
-                    .slice(IntRange(start = 0, endInclusive = 9))
-                    .joinToString(separator = " \uD83D\uDFE5 ") { it.title }
+            if (articles.isNotEmpty()) {
+                articles
+                    .take(10)
+                    .joinToString(separator = " \uD83D\uDFE5 ") { article ->
+                        article.title
+                    }
             } else {
-                ""
+                "No articles available"
             }
         }
     }
-
-
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(top = MediumPadding1)
             .statusBarsPadding()
     ) {
-
-
         Image(
             painter = painterResource(id = R.drawable.ic_logo),
             contentDescription = null,
@@ -67,24 +64,18 @@ fun HomeScreen(
                 .height(30.dp)
                 .padding(horizontal = MediumPadding1)
         )
-
-
         Spacer(modifier = Modifier.height(MediumPadding1))
-
         SearchBar(
             modifier = Modifier.padding(horizontal = MediumPadding1),
             text = "",
             readOnly = true,
-            onValueChange ={},
+            onValueChange = {},
             onClick = {
                 navigate(Screens.SearchScreen.route)
             },
             onSearch = {}
-            )
-        
-        
+        )
         Spacer(modifier = Modifier.height(MediumPadding1))
-
         Text(
             text = titles,
             modifier = Modifier
@@ -93,45 +84,14 @@ fun HomeScreen(
                 .basicMarquee(),
             fontSize = 12.sp,
             color = colorResource(id = R.color.placeholder)
-            )
-
-        Spacer(modifier = Modifier.height(MediumPadding1))
-
-
-        ArticlesList(
-            modifier = Modifier.padding(horizontal = MediumPadding1),
-            articles = articles,
-            onClick = {
-                navigate(Screens.DetailsScreen.route)
-            }
         )
-
-        when (articles.loadState.refresh) {
-            is LoadState.Loading -> {
-                Text(text = "Loading...")
-            }
-            is LoadState.Error -> {
-                val e = articles.loadState.refresh as LoadState.Error
-                Text(text = "Error: ${e.error.localizedMessage}")
-            }
-            else -> {
-                ArticlesList(
-                    modifier = Modifier.padding(horizontal = MediumPadding1),
-                    articles = articles,
-                    onClick = {
-                        navigate(Screens.DetailsScreen.route)
-                    }
-                )
-            }
-        }
-
-
+        Spacer(modifier = Modifier.height(MediumPadding1))
+        ArticlesList(
+            articles = articles ,
+            onClick = {  navigate(Screens.DetailsScreen.route) } ,
+            onPaginate ={ homeViewModel.paginateArticles()} ,
+            isLoading = articleState.isLoading
+        )
     }
-
-
-
-
-
-
 
 }
