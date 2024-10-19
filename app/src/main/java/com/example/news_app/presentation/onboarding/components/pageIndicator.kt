@@ -14,26 +14,27 @@ import androidx.compose.ui.graphics.Color
 import com.example.news_app.presentation.Dimens.indicatorSize
 import com.example.news_app.ui.theme.BlueGray
 
-
 @Composable
-fun pageIndicator(
+fun PageIndicator(
     modifier: Modifier = Modifier,
     pageSize:Int,
     selectedPage: Int,
-    selectedColor:Color=MaterialTheme.colorScheme.primary,
-    unSelectedColor:Color= BlueGray
-    )
+    selectedColor: Color = MaterialTheme.colorScheme.primary,
+    unSelectedColor: Color = BlueGray
+)
 {
     Row(
-        modifier=Modifier,
+        modifier= modifier,
         horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-           repeat(pageSize){page->
-               Box(
-                   modifier=Modifier.size(indicatorSize).clip(CircleShape)
-                       .background(color = if (page==selectedPage) selectedColor else unSelectedColor )
-               )
-           }
+    ) {
+        repeat(pageSize){page->
+            Box(
+                modifier= Modifier
+                    .size(indicatorSize)
+                    .clip(CircleShape)
+                    .background(color = if (page==selectedPage) selectedColor else unSelectedColor )
+            )
+        }
     }
 
 }

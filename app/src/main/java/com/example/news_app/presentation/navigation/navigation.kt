@@ -1,18 +1,17 @@
 package com.example.news_app.presentation.navigation
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
+import com.example.news_app.presentation.home.HomeScreen
+import com.example.news_app.presentation.home.ArticleListViewModel
 import com.example.news_app.presentation.onboarding.OnBoardingScreen
 import com.example.news_app.presentation.onboarding.OnBoardingViewModel
-import com.example.news_app.presentation.home.HomeScreen
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.LaunchedEffect
-import androidx.navigation.compose.navigation
-import com.example.news_app.presentation.onboarding.OnBoardingScreen
 import androidx.compose.ui.graphics.Color
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
