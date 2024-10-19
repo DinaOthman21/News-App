@@ -1,10 +1,9 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    id ("kotlin-kapt")
-    id ("com.google.dagger.hilt.android")
-    id ("kotlin-parcelize")
-
+    alias(libs.plugins.compose.compiler)
+    id("com.google.dagger.hilt.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -34,17 +33,17 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.9.0"
     }
     packaging {
         resources {
@@ -63,8 +62,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.firebase.firestore.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -77,28 +74,27 @@ dependencies {
     implementation ("androidx.core:core-splashscreen:1.0.1")
 
     //navigation
-    implementation ("androidx.navigation:navigation-compose:2.7.7")
+    implementation ("androidx.navigation:navigation-compose:2.8.2")
 
     //Data store
     implementation ("androidx.datastore:datastore-preferences:1.1.1")
 
 
     //Dagger Hilt
-    implementation("com.google.dagger:hilt-android:2.46")
+    implementation("com.google.dagger:hilt-android:2.52")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
-    kapt ("com.google.dagger:hilt-compiler:2.46")
-
+    kapt ("com.google.dagger:hilt-compiler:2.52")
 
 
     //Accompanist
-    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.31.4-beta")
+    implementation ("com.google.accompanist:accompanist-systemuicontroller:0.32.0")
 
 
     //Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
 
     //Datastore
-    implementation ("androidx.datastore:datastore-preferences:1.0.0")
+    implementation ("androidx.datastore:datastore-preferences:1.1.1")
 
 
     //retrofit
@@ -106,18 +102,19 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
 
     //Paging 3
-    implementation ("androidx.paging:paging-runtime:3.1.1")
-    implementation ("androidx.paging:paging-compose:3.2.0-rc01")
+    implementation ("androidx.paging:paging-runtime:3.3.2")
+    implementation ("androidx.paging:paging-compose:3.3.2")
 
     //Room
-    implementation ("androidx.room:room-runtime:2.5.2")
-    kapt ("androidx.room:room-compiler:2.5.2")
-    implementation ("androidx.room:room-ktx:2.5.2")
+    implementation ("androidx.room:room-runtime:2.6.1")
+    kapt ("androidx.room:room-compiler:2.6.1")
+    implementation ("androidx.room:room-ktx:2.6.1")
 
     //Compose Foundation
     implementation ("androidx.compose.foundation:foundation:1.4.3")
 
-
+    // Lifecycle
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.6")
 
 
 }
