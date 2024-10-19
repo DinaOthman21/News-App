@@ -1,7 +1,10 @@
 package com.example.news_app.domain.model
 
 
+import androidx.room.Entity
+import com.example.news_app.data.remote.dto.Source
 
+@Entity
 data class Article(
     val author: String,
     val content: String,
@@ -12,6 +15,3 @@ data class Article(
     val url: String,
     val urlToImage: String
 )
-
-
-

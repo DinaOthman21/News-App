@@ -23,7 +23,6 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.news_app.R
 import com.example.news_app.domain.model.Article
-import com.example.news_app.domain.model.Source
 import com.example.news_app.presentation.Dimens.ArticleImageHeight
 import com.example.news_app.presentation.Dimens.MediumPadding1
 import com.example.news_app.ui.theme.News_AppTheme

@@ -10,4 +10,3 @@ class ReadAppEntry (
         return localUserManager.readAppEntry()
     }
 }
-
