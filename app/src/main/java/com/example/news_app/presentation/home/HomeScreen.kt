@@ -28,7 +28,7 @@ import com.example.news_app.R
 import com.example.news_app.presentation.Dimens.MediumPadding1
 import com.example.news_app.presentation.common.ArticlesList
 import com.example.news_app.presentation.common.SearchBar
-import com.example.news_app.presentation.navigation.Route
+import com.example.news_app.presentation.navigation.Screens
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -77,7 +77,7 @@ fun HomeScreen(
             readOnly = true,
             onValueChange ={},
             onClick = {
-                navigate(Route.SearchScreen.route)
+                navigate(Screens.SearchScreen.route)
             },
             onSearch = {}
             )
@@ -102,7 +102,7 @@ fun HomeScreen(
             modifier = Modifier.padding(horizontal = MediumPadding1),
             articles = articles,
             onClick = {
-                navigate(Route.DetailsScreen.route)
+                navigate(Screens.DetailsScreen.route)
             }
         )
 
@@ -119,7 +119,7 @@ fun HomeScreen(
                     modifier = Modifier.padding(horizontal = MediumPadding1),
                     articles = articles,
                     onClick = {
-                        navigate(Route.DetailsScreen.route)
+                        navigate(Screens.DetailsScreen.route)
                     }
                 )
             }

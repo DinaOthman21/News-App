@@ -1,6 +1,7 @@
 package com.example.news_app.domain.usecases.app_entry
 
-data class AppEntryUseCase(
+data class AppEntryUseCases(
     val readAppEntry: ReadAppEntry,
     val saveAppEntry: SaveAppEntry
 )
+

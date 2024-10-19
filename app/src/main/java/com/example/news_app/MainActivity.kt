@@ -5,60 +5,44 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.lifecycleScope
-import com.example.news_app.domain.model.Article
-import com.example.news_app.domain.model.Source
-import com.example.news_app.presentation.navigation.NavGraph
+import com.example.news_app.presentation.navigation.AppNavigation
 import com.example.news_app.ui.theme.News_AppTheme
+import com.google.accompanist.systemuicontroller.SystemUiController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    val viewModel by viewModels<MainViewModel>()
-
+    private  val mainViewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window,false)
-
-
+        WindowCompat.setDecorFitsSystemWindows(window , false)
         installSplashScreen().apply {
             setKeepOnScreenCondition{
-                viewModel.splashCondition
+                mainViewModel.splashCondition
             }
         }
         setContent {
             News_AppTheme {
+                val systemUiController: SystemUiController = rememberSystemUiController()
+                systemUiController.isSystemBarsVisible = false
+                Box (
+                    modifier = Modifier.background(MaterialTheme.colorScheme.background)
+                ) {
+                    val startDestination = mainViewModel.startDestination
+                    AppNavigation(startDestination= startDestination)
 
-                val isSystemInDarkMode= isSystemInDarkTheme()
-                val systemController = rememberSystemUiController()
-
-                SideEffect {
-                    systemController.setSystemBarsColor(
-                        color = Color.Transparent,
-                        darkIcons = !isSystemInDarkMode
-                    )
                 }
-
-
-             Box(modifier = Modifier.background(color= MaterialTheme.colorScheme.background) ){
-                val startDestination =viewModel.startDestination
-                 NavGraph(startDestination = startDestination)
-
             }
         }
     }
 }
-}
+
+

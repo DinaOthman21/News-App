@@ -1,19 +1,18 @@
 package com.example.news_app.di
 
 import android.app.Application
-import androidx.room.Room
-import com.example.news_app.data.manager.localUserManagerImpl
+import com.example.news_app.data.manager.LocalUserManagerImpl
 import com.example.news_app.data.remote.dto.NewsApi
 import com.example.news_app.data.repository.NewsRepositoryImpl
-import com.example.news_app.domain.manager.localUserManager
+import com.example.news_app.domain.manager.LocalUserManager
 import com.example.news_app.domain.repository.NewsRepository
-import com.example.news_app.domain.usecases.app_entry.AppEntryUseCase
+import com.example.news_app.domain.usecases.app_entry.AppEntryUseCases
 import com.example.news_app.domain.usecases.app_entry.ReadAppEntry
 import com.example.news_app.domain.usecases.app_entry.SaveAppEntry
 import com.example.news_app.domain.usecases.news.GetNews
 import com.example.news_app.domain.usecases.news.NewsUseCases
 import com.example.news_app.domain.usecases.news.SearchNews
-import com.example.news_app.util.constants.BASE_URL
+import com.example.news_app.util.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,15 +30,16 @@ object AppModule {
     @Singleton
     fun provideLocalUserManager(
         application: Application
-    ):localUserManager=localUserManagerImpl(application)
+    ): LocalUserManager = LocalUserManagerImpl(application)
+
 
 
     @Provides
     @Singleton
     fun provideAppEntryUseCases(
-        localUserManager: localUserManager
-    )= AppEntryUseCase(
-        readAppEntry = ReadAppEntry(localUserManager),
+        localUserManager: LocalUserManager
+    ) = AppEntryUseCases(
+        readAppEntry = ReadAppEntry(localUserManager) ,
         saveAppEntry = SaveAppEntry(localUserManager)
     )
 
