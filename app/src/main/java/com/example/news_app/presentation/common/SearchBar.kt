@@ -13,20 +13,20 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
+import com.example.news_app.R
+import androidx.compose.material3.TextField
+import androidx.compose.ui.composed
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.news_app.R
 import com.example.news_app.presentation.Dimens.IconSize
 import com.example.news_app.ui.theme.News_AppTheme
 
@@ -40,13 +40,11 @@ fun SearchBar(
     onValueChange: (String) -> Unit,
     onSearch: () -> Unit
 ) {
-
-
+    //get all the interaction events
     val interactionSource = remember {
         MutableInteractionSource()
     }
-
-
+    //get the pressed state
     val isClicked = interactionSource.collectIsPressedAsState().value
     LaunchedEffect(key1 = isClicked){
         if(isClicked){
@@ -54,7 +52,9 @@ fun SearchBar(
         }
     }
 
-    Box(modifier=modifier) {
+    Box(
+        modifier=modifier
+    ) {
         TextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -63,12 +63,12 @@ fun SearchBar(
             onValueChange =onValueChange,
             readOnly=readOnly,
             leadingIcon = {
-              Icon(
-                  painter = painterResource(id = R.drawable.ic_search),
-                  contentDescription =null,
-                  modifier=Modifier.size(IconSize) ,
-                  tint= colorResource(id = R.color.body)
-              )
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_search),
+                    contentDescription =null,
+                    modifier=Modifier.size(IconSize) ,
+                    tint= colorResource(id = R.color.body)
+                )
             },
 
             placeholder = {
@@ -76,7 +76,7 @@ fun SearchBar(
                     text = "search",
                     style = MaterialTheme.typography.bodySmall,
                     color = colorResource(id = R.color.placeholder)
-                    )
+                )
             },
 
             shape = MaterialTheme.shapes.medium,
@@ -103,22 +103,19 @@ fun SearchBar(
 
         )
     }
-
-
 }
 
+// custom modifier
 fun Modifier.searchBarBorder() = composed {
     if(! isSystemInDarkTheme() ){
-
-       border(width = 1.dp,
-           color = Color.Black,
-           shape=MaterialTheme.shapes.medium
-           )
+        border(width = 1.dp,
+            color = Color.Black,
+            shape=MaterialTheme.shapes.medium
+        )
     }
-    else{
-        this
-    }
+    else{ this }
 }
+
 
 
 @Preview(showBackground = true)
@@ -126,8 +123,12 @@ fun Modifier.searchBarBorder() = composed {
 @Composable
 fun SearchBarPreview(){
     News_AppTheme {
-        SearchBar(text = "", readOnly = false, onValueChange ={} ) {
-            
-        }
+        SearchBar(
+            text = "",
+            readOnly = false,
+            onValueChange ={}  ,
+            onClick = {},
+            onSearch = {} ,
+        )
     }
 }
