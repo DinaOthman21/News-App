@@ -31,7 +31,7 @@ class ArticleListViewModel @Inject constructor(
             }
             newsRepository.getNews(
                 forceFetchFromRemote = forceFetchFromRemote ,
-                sources = listOf("bbc-news","abc-news","al-jazeera-english") ,
+                sources = listOf("bbc-news","abc-news","al-jazeera-english","TechCrunch") ,
                 page = articleListState.value.articleListPage
             ).collectLatest { result ->
                 when(result) {

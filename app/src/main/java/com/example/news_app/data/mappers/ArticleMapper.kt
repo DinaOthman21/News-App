@@ -1,5 +1,6 @@
 package com.example.news_app.data.mappers
 
+import android.util.Log
 import com.example.news_app.data.local.LocalArticle
 import com.example.news_app.data.remote.dto.ArticleDto
 import com.example.news_app.data.remote.dto.Source
@@ -44,10 +45,12 @@ fun sourceToString(source: Source?): String {
 
 fun stringToSource(sourceString: String): Source {
     val parts = sourceString.split(",")
+    Log.d("Mapping", "Source String: $sourceString -> Source(id=${parts.getOrNull(0)}, name=${parts.getOrNull(1)})")
     return Source(
         id = parts.getOrNull(0) ?: "",
         name = parts.getOrNull(1) ?: ""
     )
 }
+
 
 
