@@ -1,4 +1,4 @@
-package com.example.news_app.presentation.news_navigator
+package com.example.news_app.presentation.news_navigator.component
 
 import com.example.news_app.ui.theme.News_AppTheme
 

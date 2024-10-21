@@ -8,11 +8,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.example.news_app.presentation.home.HomeScreen
-import com.example.news_app.presentation.home.ArticleListViewModel
 import com.example.news_app.presentation.onboarding.OnBoardingScreen
 import com.example.news_app.presentation.onboarding.OnBoardingViewModel
 import androidx.compose.ui.graphics.Color
+import com.example.news_app.presentation.news_navigator.NewsNavigator
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
@@ -51,12 +50,8 @@ fun AppNavigation(
             composable(
                 route = Screens.NewsNavigatorScreen.route
             ){
-                val homeViewModel : ArticleListViewModel = hiltViewModel()
                 SetBarColor(MaterialTheme.colorScheme.onSecondary)
-                HomeScreen(
-                    homeViewModel ,
-                    navigate = {}
-                )
+                NewsNavigator()
             }
         }
     }

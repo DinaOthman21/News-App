@@ -30,11 +30,11 @@ import com.example.news_app.presentation.common.ArticlesList
 
 @Composable
 fun HomeScreen(
-    homeViewModel: ArticleListViewModel,
+    articleListViewModel: ArticleListViewModel,
     navigate: (String) -> Unit
 ) {
 
-    val articleState =homeViewModel.articleListState.collectAsState().value
+    val articleState =articleListViewModel.articleListState.collectAsState().value
     val articles = articleState.articleList
 
     val titles by remember(articles) {
@@ -89,7 +89,7 @@ fun HomeScreen(
         ArticlesList(
             articles = articles ,
             onClick = {  navigate(Screens.DetailsScreen.route) } ,
-            onPaginate ={ homeViewModel.paginateArticles()} ,
+            onPaginate ={ articleListViewModel.paginateArticles()} ,
             isLoading = articleState.isLoading
         )
     }
