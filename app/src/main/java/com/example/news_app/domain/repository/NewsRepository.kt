@@ -14,7 +14,8 @@ interface NewsRepository {
 
     suspend  fun searchNews(
         searchQuery: String,
-        sources: List<String>
+        sources: List<String> ,
+        page : Int
     ): Flow<Resource<List<Article>>>
 
     suspend fun upsertArticle(article: Article)

@@ -72,10 +72,38 @@ class NewsRepositoryImpl @Inject constructor(
 
     override suspend fun searchNews(
         searchQuery: String,
-        sources: List<String>
+        sources: List<String>,
+        page: Int
     ): Flow<Resource<List<Article>>> {
-        TODO("Not yet implemented")
+        return flow {
+            emit(Resource.Loading(true))
+            val articleListFromApiService =try {
+                newsApi.searchNews(
+                    searchQuery = searchQuery,
+                    sources = sources.joinToString(separator = ",") ,
+                    page = page
+                )
+            } catch (e:IOException){
+                e.printStackTrace()
+                emit(Resource.Error(message = "Loading Error"))
+                return@flow
+            } catch (e : HttpException){
+                e.printStackTrace()
+                emit(Resource.Error(message = "Loading Error"))
+                return@flow
+            } catch (e : Exception){
+                e.printStackTrace()
+                emit(Resource.Error(message = "Loading Error"))
+                return@flow
+            }
+            val articles = articleListFromApiService.articles.map { articleDto ->
+                articleDto.toLocalArticle().toArticle()
+            }
+            emit(Resource.Success(articles))
+            emit(Resource.Loading(false))
+        }
     }
+
 
     override suspend fun upsertArticle(article: Article) {
         TODO("Not yet implemented")

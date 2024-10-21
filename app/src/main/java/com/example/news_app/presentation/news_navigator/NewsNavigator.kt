@@ -25,6 +25,8 @@ import com.example.news_app.presentation.home.ArticleListViewModel
 import com.example.news_app.presentation.home.HomeScreen
 import com.example.news_app.presentation.navigation.Screens
 import com.example.news_app.presentation.news_navigator.component.NewsBottomNavigation
+import com.example.news_app.presentation.search.SearchScreen
+import com.example.news_app.presentation.search.SearchViewModel
 
 @Composable
 fun NewsNavigator() {
@@ -102,16 +104,11 @@ fun NewsNavigator() {
             }
 
             composable(route = Screens.SearchScreen.route) {
-/*                val searchViewModel: SearchViewModel = hiltViewModel()
+                val searchViewModel: SearchViewModel = hiltViewModel()
                 SearchScreen(
                     searchViewModel = searchViewModel ,
-                    navigateToDetails = {
-                        navigateToDetails(
-                            navController = navController ,
-                            article =it
-                        )
-                    }
-                )*/
+                    navController = navController
+                )
             }
 
             composable(
