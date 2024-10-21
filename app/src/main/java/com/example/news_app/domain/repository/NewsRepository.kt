@@ -22,4 +22,6 @@ interface NewsRepository {
     suspend fun deleteArticle(article: Article)
 
     fun getArticles(): Flow<List<Article>>
+
+    suspend fun getArticle(url : String) : Flow<Resource<Article>>
 }

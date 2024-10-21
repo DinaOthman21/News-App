@@ -25,13 +25,14 @@ import com.example.news_app.presentation.common.SearchBar
 import com.example.news_app.presentation.navigation.Screens
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.navigation.NavHostController
 import com.example.news_app.presentation.common.ArticlesList
 
 
 @Composable
 fun HomeScreen(
     articleListViewModel: ArticleListViewModel,
-    navigate: (String) -> Unit
+    navController : NavHostController
 ) {
 
     val articleState =articleListViewModel.articleListState.collectAsState().value
@@ -71,7 +72,7 @@ fun HomeScreen(
             readOnly = true,
             onValueChange = {},
             onClick = {
-                navigate(Screens.SearchScreen.route)
+                navController.navigate(Screens.SearchScreen.route)
             },
             onSearch = {}
         )
@@ -88,9 +89,9 @@ fun HomeScreen(
         Spacer(modifier = Modifier.height(MediumPadding1))
         ArticlesList(
             articles = articles ,
-            onClick = {  navigate(Screens.DetailsScreen.route) } ,
             onPaginate ={ articleListViewModel.paginateArticles()} ,
-            isLoading = articleState.isLoading
+            isLoading = articleState.isLoading ,
+            navController = navController
         )
     }
 

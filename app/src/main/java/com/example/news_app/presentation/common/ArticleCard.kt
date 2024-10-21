@@ -1,6 +1,7 @@
 package com.example.news_app.presentation.common
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
+
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,27 +25,29 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.news_app.R
-import com.example.news_app.data.remote.dto.Source
 import com.example.news_app.domain.model.Article
 import com.example.news_app.presentation.Dimens.ArticleCardSize
 import com.example.news_app.presentation.Dimens.ExtraSmallPadding
 import com.example.news_app.presentation.Dimens.ExtraSmallPadding2
 import com.example.news_app.presentation.Dimens.SmallIconSize
-import com.example.news_app.ui.theme.News_AppTheme
+import com.example.news_app.presentation.navigation.Screens
 
 @Composable
 fun ArticleCard(
     modifier: Modifier = Modifier,
     article: Article,
-    onClick: (() -> Unit)? = null
+    navController: NavController
 ){
     val context = LocalContext.current
     Row(
-        modifier = modifier.clickable {  onClick?.invoke() }
+        modifier = modifier.clickable {
+            val encodedUrl = Uri.encode(article.url)
+            navController.navigate(Screens.DetailsScreen.route +"/${encodedUrl}")
+        }
     ) {
         AsyncImage(
             modifier = Modifier
@@ -97,21 +100,3 @@ fun ArticleCard(
     }
 }
 
-@Preview(showBackground = true)
-@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
-@Composable
-fun ArticleCardPreview() {
-    News_AppTheme (dynamicColor = false) {
-        ArticleCard( article = Article(
-            author = "",
-            content = "",
-            description = "",
-            publishedAt = "2 hours",
-            source = Source(id = "", name = "BBC"),
-            title = "Her train broke down. Her phone died. And then she met her Saver in a",
-            url = "",
-            urlToImage = "https://ichef.bbci.co.uk/live-experience/cps/624/cpsprodpb/11787/production/_124395517_bbcbreakingnewsgraphic.jpg"
-        )
-        )
-    }
-}

@@ -24,7 +24,6 @@ class NewsRepositoryImpl @Inject constructor(
         sources:List<String> ,
         page : Int
     ): Flow<Resource<List<Article>>> {
-        // return a sequence of Actions
         return flow {
             emit(Resource.Loading(true))
             val localArticleList = newsDatabase.newsDao.getArticles()
@@ -90,5 +89,20 @@ class NewsRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-}
+    override suspend fun getArticle(url: String): Flow<Resource<Article>> {
+        return flow {
+            emit(Resource.Loading(true))
+            val localArticle = newsDatabase.newsDao.getArticleByUrl(url = url)
+            if (localArticle != null) {
+                emit(Resource.Success(localArticle.toArticle()))
+                emit(Resource.Loading(false))
+                return@flow
+            }
+            emit(Resource.Error(message = "No Article"))
+            emit(Resource.Loading(false))
+            }
+        }
+    }
+
+
 

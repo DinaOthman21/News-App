@@ -11,10 +11,16 @@ interface NewsDao {
     @Upsert
     suspend fun upsertArticleList(articleList : List<LocalArticle>)
 
+    @Query("SELECT * FROM LocalArticle")
+    fun getArticles(): List<LocalArticle>
+
+
+    @Query("SELECT * FROM LocalArticle WHERE url=:url")
+    suspend fun getArticleByUrl(url : String) : LocalArticle?
+
     @Delete
     suspend fun delete(localArticle: LocalArticle)
 
-    @Query("SELECT * FROM LocalArticle")
-    fun getArticles(): List<LocalArticle>
+
 
 }

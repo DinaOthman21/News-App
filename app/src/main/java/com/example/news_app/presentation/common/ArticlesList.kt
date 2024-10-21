@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import com.example.news_app.domain.model.Article
 import com.example.news_app.presentation.Dimens.ExtraSmallPadding2
 import com.example.news_app.presentation.Dimens.MediumPadding1
@@ -18,9 +19,9 @@ import com.example.news_app.presentation.Dimens.MediumPadding1
 fun ArticlesList(
     modifier: Modifier = Modifier,
     articles: List<Article>,
-    onClick: (Article) -> Unit,
     onPaginate: () -> Unit,
-    isLoading: Boolean
+    isLoading: Boolean ,
+    navController : NavHostController
 ) {
     if (articles.isEmpty() && !isLoading) {
         EmptyScreen()
@@ -32,7 +33,7 @@ fun ArticlesList(
             contentPadding = PaddingValues(all = ExtraSmallPadding2)
         ) {
             itemsIndexed(articles) { index, article ->
-                ArticleCard(article = article, onClick = { onClick(article) })
+                ArticleCard(article = article, navController = navController )
 
                 if (index >= articles.size - 5 && !isLoading) {
                     onPaginate()

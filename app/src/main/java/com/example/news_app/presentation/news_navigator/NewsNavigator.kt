@@ -16,8 +16,11 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.example.news_app.presentation.details.DetailsScreen
 import com.example.news_app.presentation.home.ArticleListViewModel
 import com.example.news_app.presentation.home.HomeScreen
 import com.example.news_app.presentation.navigation.Screens
@@ -94,7 +97,7 @@ fun NewsNavigator() {
                 val articleListViewModel : ArticleListViewModel = hiltViewModel()
                 HomeScreen(
                     articleListViewModel = articleListViewModel ,
-                    navigate = {}
+                    navController = navController
                 )
             }
 
@@ -111,22 +114,14 @@ fun NewsNavigator() {
                 )*/
             }
 
-            composable(route = Screens.DetailsScreen.route) {
-/*               val detailsViewModel: DetailsViewModel = hiltViewModel()
-                if (detailsViewModel.sideEffect != null){
-                    Toast.makeText(
-                        LocalContext.current ,detailsViewModel.sideEffect ,Toast.LENGTH_SHORT
-                    ).show()
-                    detailsViewModel.onEvent(DetailsEvent.RemoveSideEffect)
-                }
-                navController.previousBackStackEntry?.savedStateHandle?.get<Article?>("article")
-                    ?.let { article ->
-                        DetailsScreen(
-                            article = article,
-                            event = detailsViewModel::onEvent,
-                            navigateUp = { navController.navigateUp() }
-                        )
-            }*/
+            composable(
+                route = Screens.DetailsScreen.route + "/{articleUrl}" ,
+                arguments = listOf(navArgument("articleUrl") { type = NavType.StringType })
+            ) { navBack ->
+                DetailsScreen(
+                    navController = navController,
+                    navBackStackEntry = navBack
+                    )
             }
 
             composable(route = Screens.BookMarkScreen.route) {
