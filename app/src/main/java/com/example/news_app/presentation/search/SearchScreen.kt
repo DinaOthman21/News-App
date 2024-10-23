@@ -42,7 +42,9 @@ fun SearchScreen(
                 articles = articles,
                 navController = navController ,
                 isLoading = searchState.isLoading ,
-                onPaginate = {}
+                onPaginate = {
+                    searchViewModel.searchNews(loadMore = true)
+                }
             )
         }
 

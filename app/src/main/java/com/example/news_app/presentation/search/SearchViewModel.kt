@@ -24,9 +24,20 @@ class SearchViewModel @Inject constructor(
         _state.value = state.value.copy(searchQuery = searchQuery)
     }
 
-    fun searchNews() {
+    fun searchNews(loadMore: Boolean = false) {
         viewModelScope.launch(Dispatchers.IO) {
-             newsRepository.searchNews(
+            if (loadMore) {
+                _state.value = _state.value.copy(
+                    isLoading = true
+                )
+            }  else {
+                _state.value = _state.value.copy(
+                    isLoading = true,
+                    articleListPage = 1, // Reset page for new search
+                    articles = emptyList() // Clear current results
+                )
+            }
+            newsRepository.searchNews(
                 searchQuery = state.value.searchQuery,
                 sources = listOf("bbc-news", "abc-news", "al-jazeera-english") ,
                 page = state.value.articleListPage
@@ -46,8 +57,9 @@ class SearchViewModel @Inject constructor(
                     is Resource.Success -> {
                         result.data?.let {  articleList ->
                             _state.value=_state.value.copy(
-                                articles = articleList,
-                                articleListPage = state.value.articleListPage+1
+                                articles = _state.value.articles.orEmpty() + articleList,
+                                articleListPage = state.value.articleListPage+1 ,
+                                isLoading = false
                             )
                         }
                     }
