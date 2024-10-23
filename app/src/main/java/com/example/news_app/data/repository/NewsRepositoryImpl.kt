@@ -20,24 +20,11 @@ class NewsRepositoryImpl @Inject constructor(
 ) : NewsRepository {
 
     override fun getNews(
-        forceFetchFromRemote: Boolean,
         sources:List<String> ,
         page : Int
     ): Flow<Resource<List<Article>>> {
         return flow {
             emit(Resource.Loading(true))
-            val localArticleList = newsDatabase.newsDao.getArticles()
-
-            if (localArticleList.isNotEmpty() && ! forceFetchFromRemote){
-                emit(Resource.Success(
-                    data = localArticleList.map { localArticle ->
-                        localArticle.toArticle()
-                    }
-                ))
-
-                emit(Resource.Loading(false))
-                return@flow
-            }
 
             val articleListFromApiService =try {
                 newsApi.getNews(
@@ -57,18 +44,16 @@ class NewsRepositoryImpl @Inject constructor(
                 emit(Resource.Error(message = "Loading Error"))
                 return@flow
             }
-            val localArticles = articleListFromApiService.articles.let {
+            val articles = articleListFromApiService.articles.let {
                 it.map { articleDto ->
-                    articleDto.toLocalArticle()
+                    articleDto.toLocalArticle().toArticle()
                 }
             }
-            newsDatabase.newsDao.upsertArticleList(localArticles)
-            emit(Resource.Success(
-                localArticles.map { it.toArticle() }
-            ))
+            emit(Resource.Success(articles))
             emit(Resource.Loading(false))
         }
     }
+
 
     override suspend fun searchNews(
         searchQuery: String,

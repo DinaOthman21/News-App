@@ -33,8 +33,8 @@ class SearchViewModel @Inject constructor(
             }  else {
                 _state.value = _state.value.copy(
                     isLoading = true,
-                    articleListPage = 1, // Reset page for new search
-                    articles = emptyList() // Clear current results
+                    articleListPage = 1,
+                    articles = emptyList()
                 )
             }
             newsRepository.searchNews(
@@ -66,5 +66,9 @@ class SearchViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun paginateArticles() {
+        searchNews(true)
     }
 }

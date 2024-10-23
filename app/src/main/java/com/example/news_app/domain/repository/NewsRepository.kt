@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {
     fun getNews(
-        forceFetchFromRemote : Boolean ,
         sources: List<String> ,
         page : Int
     ): Flow<Resource<List<Article>>>

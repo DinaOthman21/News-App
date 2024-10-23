@@ -21,16 +21,21 @@ class ArticleListViewModel @Inject constructor(
     val articleListState = _articleListState.asStateFlow()
 
     init {
-        getArticleList(false)
+        getArticleList()
     }
 
-    private fun getArticleList(forceFetchFromRemote: Boolean) {
+    private fun getArticleList(loadMore: Boolean = false) {
         viewModelScope.launch(Dispatchers.IO) {
             _articleListState.update {
                 it.copy(isLoading = true)
             }
+            if (!loadMore) {
+                _articleListState.update {
+                    it.copy(articleListPage = 1, articleList = emptyList())
+                }
+            }
+
             newsRepository.getNews(
-                forceFetchFromRemote = forceFetchFromRemote ,
                 sources = listOf("bbc-news","abc-news","al-jazeera-english","TechCrunch") ,
                 page = articleListState.value.articleListPage
             ).collectLatest { result ->
@@ -49,8 +54,13 @@ class ArticleListViewModel @Inject constructor(
                         result.data?.let { articleList ->
                             _articleListState.update {
                                 it.copy(
-                                    articleList =articleListState.value.articleList +articleList.shuffled() ,
-                                    articleListPage = articleListState.value.articleListPage+1
+                                    articleList = if (loadMore) {
+                                        articleListState.value.articleList + articleList.shuffled()
+                                    } else {
+                                        articleList.shuffled()
+                                    } ,
+                                    articleListPage = articleListState.value.articleListPage+1 ,
+                                    isLoading = false
                                 )
                             }
 
