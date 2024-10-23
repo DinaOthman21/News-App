@@ -1,7 +1,6 @@
 package com.example.news_app.presentation.common
 
 
-import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +24,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.news_app.R
@@ -34,20 +32,16 @@ import com.example.news_app.presentation.Dimens.ArticleCardSize
 import com.example.news_app.presentation.Dimens.ExtraSmallPadding
 import com.example.news_app.presentation.Dimens.ExtraSmallPadding2
 import com.example.news_app.presentation.Dimens.SmallIconSize
-import com.example.news_app.presentation.navigation.Screens
 
 @Composable
 fun ArticleCard(
     modifier: Modifier = Modifier,
-    article: Article,
-    navController: NavController
+    article: Article ,
+    onClick:() -> Unit
 ){
     val context = LocalContext.current
     Row(
-        modifier = modifier.clickable {
-            val encodedUrl = Uri.encode(article.url)
-            navController.navigate(Screens.DetailsScreen.route +"/${encodedUrl}")
-        }
+        modifier = modifier.clickable { onClick() }
     ) {
         AsyncImage(
             modifier = Modifier

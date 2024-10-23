@@ -26,13 +26,15 @@ import com.example.news_app.presentation.navigation.Screens
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
+import com.example.news_app.domain.model.Article
 import com.example.news_app.presentation.common.ArticlesList
 
 
 @Composable
 fun HomeScreen(
     articleListViewModel: ArticleListViewModel,
-    navController : NavHostController
+    navController : NavHostController,
+    onItemClick:(Article) -> Unit
 ) {
 
     val articleState =articleListViewModel.articleListState.collectAsState().value
@@ -91,7 +93,9 @@ fun HomeScreen(
             articles = articles ,
             onPaginate ={ articleListViewModel.paginateArticles()} ,
             isLoading = articleState.isLoading ,
-            navController = navController
+            onClick = {
+                onItemClick(it)
+            }
         )
     }
 

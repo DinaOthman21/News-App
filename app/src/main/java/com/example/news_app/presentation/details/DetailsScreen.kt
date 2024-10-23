@@ -15,35 +15,24 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.news_app.R
 import com.example.news_app.presentation.Dimens.ArticleImageHeight
 import com.example.news_app.presentation.Dimens.MediumPadding1
 import com.example.news_app.presentation.details.components.DetailsTopBar
-import androidx.compose.runtime.LaunchedEffect
+import androidx.navigation.NavHostController
+import com.example.news_app.domain.model.Article
 
 @Composable
 fun DetailsScreen(
-    navController: NavHostController,
-    navBackStackEntry: NavBackStackEntry
+    article: Article,
+    detailsViewModel: DetailsViewModel ,
+    navController: NavHostController
 ) {
-
-    val detailsViewModel = hiltViewModel<DetailsViewModel>()
-    val detailsState = detailsViewModel.detailsScreenState.collectAsState().value
-
-    val articleUrl = Uri.decode(navBackStackEntry.arguments?.getString("articleUrl"))
-    LaunchedEffect(articleUrl) {
-        detailsViewModel.getArticle(url = articleUrl)
-    }
-
     val context = LocalContext.current
 
     Column(
@@ -54,7 +43,7 @@ fun DetailsScreen(
         DetailsTopBar(
             onBrowsingClick = {
                 Intent(Intent.ACTION_VIEW).also {
-                    it.data = Uri.parse(detailsState.article?.url)
+                    it.data = Uri.parse(article.url)
                     if (it.resolveActivity(context.packageManager) != null) {
                         context.startActivity(it)
                     }
@@ -62,7 +51,7 @@ fun DetailsScreen(
             },
             onShareClick = {
                 Intent(Intent.ACTION_SEND).also {
-                    it.putExtra(Intent.EXTRA_TEXT, detailsState.article?.url)
+                    it.putExtra(Intent.EXTRA_TEXT, article.url)
                     it.type = "text/plain"
                     if (it.resolveActivity(context.packageManager) != null) {
                         context.startActivity(it)
@@ -70,13 +59,12 @@ fun DetailsScreen(
                 }
             },
             onBookMarkClick = {
-              /*  event(
-                    DetailsEvent.UpsertDeleteArticle(article = article)
-                )*/
+                detailsViewModel.upsertOrDeleteArticle(article = article)
             },
-            onBackClick = {navController.popBackStack()}
+            onBackClick = {
+                navController.popBackStack()
+            }
         )
-
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(
@@ -87,7 +75,7 @@ fun DetailsScreen(
         ) {
             item {
                 AsyncImage(
-                    model = ImageRequest.Builder(context = context).data(detailsState.article?.urlToImage)
+                    model = ImageRequest.Builder(context = context).data(article.urlToImage)
                         .build(),
                     contentDescription = null,
                     modifier = Modifier
@@ -97,29 +85,21 @@ fun DetailsScreen(
                     contentScale = ContentScale.Crop
                 )
                 Spacer(modifier = Modifier.height(MediumPadding1))
-                detailsState.article?.let {
                     Text(
-                        text = it.title,
+                        text = article.title,
                         style = MaterialTheme.typography.displaySmall,
                         color = colorResource(
                             id = R.color.text_title
                         )
                     )
-                }
-                detailsState.article?.let {
                     Text(
-                        text = it.content,
+                        text = article.content,
                         style = MaterialTheme.typography.bodyMedium,
                         color = colorResource(
                             id = R.color.body
                         )
                     )
-                }
             }
-
         }
-
-
-
     }
 }

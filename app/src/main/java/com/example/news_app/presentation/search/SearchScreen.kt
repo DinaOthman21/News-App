@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
+import com.example.news_app.domain.model.Article
 import com.example.news_app.presentation.Dimens.MediumPadding1
 import com.example.news_app.presentation.common.ArticlesList
 import com.example.news_app.presentation.common.SearchBar
@@ -18,7 +18,7 @@ import com.example.news_app.presentation.common.SearchBar
 @Composable
 fun SearchScreen(
     searchViewModel: SearchViewModel = hiltViewModel(),
-    navController : NavHostController
+    onItemClick:(Article) -> Unit
 ) {
     val searchState by searchViewModel.state
     Column(
@@ -40,10 +40,12 @@ fun SearchScreen(
         searchState.articles?.let { articles ->
             ArticlesList(
                 articles = articles,
-                navController = navController ,
                 isLoading = searchState.isLoading ,
                 onPaginate = {
                     searchViewModel.paginateArticles()
+                } ,
+                onClick = {
+                    onItemClick(it)
                 }
             )
         }

@@ -34,6 +34,20 @@ fun ArticleDto.toLocalArticle(): LocalArticle {
     )
 }
 
+fun Article.toLocalArticle(): LocalArticle {
+    return LocalArticle(
+        author = author,
+        content = content,
+        description = description,
+        publishedAt = publishedAt,
+        title = title,
+        url = url,
+        urlToImage = urlToImage,
+        source = sourceToString(source)
+    )
+}
+
+
 fun sourceToString(source: Source?): String {
     return if (source != null) {
         "${source.id },${source.name }"

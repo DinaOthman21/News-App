@@ -55,7 +55,7 @@ class ArticleListViewModel @Inject constructor(
                             _articleListState.update {
                                 it.copy(
                                     articleList = if (loadMore) {
-                                        articleListState.value.articleList + articleList.shuffled()
+                                        articleListState.value.articleList + articleList
                                     } else {
                                         articleList.shuffled()
                                     } ,

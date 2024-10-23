@@ -1,5 +1,6 @@
 package com.example.news_app.presentation.news_navigator
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -14,13 +15,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.navArgument
+import com.example.news_app.domain.model.Article
 import com.example.news_app.presentation.details.DetailsScreen
+import com.example.news_app.presentation.details.DetailsViewModel
 import com.example.news_app.presentation.home.ArticleListViewModel
 import com.example.news_app.presentation.home.HomeScreen
 import com.example.news_app.presentation.navigation.Screens
@@ -88,7 +90,7 @@ fun NewsNavigator() {
                 )
             }
 
-        }){  it ->
+        }){
         val bottomPadding = it.calculateBottomPadding()
         NavHost(
             navController = navController,
@@ -99,7 +101,13 @@ fun NewsNavigator() {
                 val articleListViewModel : ArticleListViewModel = hiltViewModel()
                 HomeScreen(
                     articleListViewModel = articleListViewModel ,
-                    navController = navController
+                    navController = navController ,
+                    onItemClick = { article->
+                        navigateToDetails(
+                            navController = navController ,
+                            article = article
+                        )
+                    }
                 )
             }
 
@@ -107,32 +115,37 @@ fun NewsNavigator() {
                 val searchViewModel: SearchViewModel = hiltViewModel()
                 SearchScreen(
                     searchViewModel = searchViewModel ,
-                    navController = navController
-                )
-            }
-
-            composable(
-                route = Screens.DetailsScreen.route + "/{articleUrl}" ,
-                arguments = listOf(navArgument("articleUrl") { type = NavType.StringType })
-            ) { navBack ->
-                DetailsScreen(
-                    navController = navController,
-                    navBackStackEntry = navBack
-                    )
-            }
-
-            composable(route = Screens.BookMarkScreen.route) {
- /*               val bookMarkViewModel: BookmarkViewModel = hiltViewModel()
-                val state = bookMarkViewModel.state.value
-                BookmarkScreen(
-                    state = state,
-                    navigateToDetails = { article ->
+                    onItemClick = { article ->
                         navigateToDetails(
                             navController = navController ,
                             article = article
                         )
                     }
-                )*/
+                )
+            }
+
+            composable(
+                route = Screens.DetailsScreen.route
+            ) {
+                val detailsViewModel: DetailsViewModel = hiltViewModel()
+                if (detailsViewModel.sideEffect != null){
+                    Toast.makeText(
+                        LocalContext.current ,detailsViewModel.sideEffect ,Toast.LENGTH_SHORT
+                    ).show()
+                     detailsViewModel.removeSideEffect()
+                }
+                navController.previousBackStackEntry?.savedStateHandle?.get<Article?>("article")
+                    ?.let { article ->
+                        DetailsScreen(
+                            article = article,
+                            detailsViewModel = detailsViewModel,
+                            navController = navController
+                        )
+                    }
+            }
+
+            composable(route = Screens.BookMarkScreen.route) {
+
             }
 
         }
@@ -152,3 +165,11 @@ private fun navigateToTab(navController: NavController, route: String) {
         }
     }
 }
+
+private fun navigateToDetails(navController: NavController, article: Article) {
+    navController.currentBackStackEntry?.savedStateHandle?.set("article", article)
+    navController.navigate(
+        route = Screens.DetailsScreen.route
+    )
+}
+

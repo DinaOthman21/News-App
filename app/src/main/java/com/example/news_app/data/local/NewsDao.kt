@@ -2,17 +2,19 @@ package com.example.news_app.data.local
 
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Upsert
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NewsDao {
 
-    @Upsert
-    suspend fun upsertArticleList(articleList : List<LocalArticle>)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun upsertArticle(localArticle: LocalArticle)
 
     @Query("SELECT * FROM LocalArticle")
-    fun getArticles(): List<LocalArticle>
+    fun getArticles(): Flow<List<LocalArticle>>
 
 
     @Query("SELECT * FROM LocalArticle WHERE url=:url")

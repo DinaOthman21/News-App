@@ -23,5 +23,5 @@ interface NewsRepository {
 
     fun getArticles(): Flow<List<Article>>
 
-    suspend fun getArticle(url : String) : Flow<Resource<Article>>
+    suspend fun getArticle(url : String) : Article?
 }

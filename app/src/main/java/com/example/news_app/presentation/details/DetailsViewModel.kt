@@ -1,62 +1,50 @@
 package com.example.news_app.presentation.details
 
-import androidx.lifecycle.SavedStateHandle
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.news_app.domain.model.Article
 import com.example.news_app.domain.repository.NewsRepository
-import com.example.news_app.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
-    private val newsRepository: NewsRepository,
-    savedStateHandle: SavedStateHandle
+    private val newsRepository: NewsRepository
 ) : ViewModel(){
 
-    private val articleUrl =savedStateHandle.get<String>("articleUrl")
+    var sideEffect by mutableStateOf<String?>(null)
+        private set
 
-    private var _detailsScreenState = MutableStateFlow(DetailsScreenState())
-    val detailsScreenState = _detailsScreenState.asStateFlow()
-
-    init {
-        getArticle(articleUrl ?: "")
-    }
-
-     fun getArticle(url: String) {
-        viewModelScope.launch {
-            _detailsScreenState.update {
-                it.copy(isLoading = true)
+    fun upsertOrDeleteArticle(article: Article) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val existingArticle = newsRepository.getArticle(article.url)
+            if (existingArticle == null) {
+                upsertArticle(article)
+            } else {
+                deleteArticle(article)
             }
-            newsRepository.getArticle(url = url).collectLatest { result ->
-                when(result){
-                    is Resource.Error -> {
-                        _detailsScreenState.update {
-                            it.copy(isLoading = false)
-                        }
-                    }
-                    is Resource.Loading -> {
-                        _detailsScreenState.update {
-                            it.copy(isLoading = result.isLoading)
-                        }
-                    }
-                    is Resource.Success -> {
-                        result.data?.let { article ->
-                            _detailsScreenState.update {
-                                it.copy(article = article,isLoading = false)
-                            }
-
-                        }
-
-                    }
-                }
-            }
-
         }
     }
+
+    fun removeSideEffect() {
+        sideEffect = null
+    }
+
+
+    private suspend fun deleteArticle(article: Article) {
+        newsRepository.deleteArticle(article = article)
+        sideEffect = "Article Deleted"
+    }
+
+    private suspend fun upsertArticle(article: Article) {
+        newsRepository.upsertArticle(article = article)
+        sideEffect = "Article Saved"
+    }
+
+
 }
