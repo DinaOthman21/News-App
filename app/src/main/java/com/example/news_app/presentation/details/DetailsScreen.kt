@@ -1,13 +1,11 @@
 package com.example.news_app.presentation.details
 
-import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import android.net.Uri
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,14 +22,13 @@ import com.example.news_app.R
 import com.example.news_app.presentation.Dimens.ArticleImageHeight
 import com.example.news_app.presentation.Dimens.MediumPadding1
 import com.example.news_app.presentation.details.components.DetailsTopBar
-import androidx.navigation.NavHostController
 import com.example.news_app.domain.model.Article
 
 @Composable
 fun DetailsScreen(
     article: Article,
     detailsViewModel: DetailsViewModel ,
-    navController: NavHostController
+    onBackClick : () -> Unit ,
 ) {
     val context = LocalContext.current
 
@@ -42,27 +39,16 @@ fun DetailsScreen(
     ) {
         DetailsTopBar(
             onBrowsingClick = {
-                Intent(Intent.ACTION_VIEW).also {
-                    it.data = Uri.parse(article.url)
-                    if (it.resolveActivity(context.packageManager) != null) {
-                        context.startActivity(it)
-                    }
-                }
+              detailsViewModel.onBrowsingClick(url = article.url, context = context)
             },
             onShareClick = {
-                Intent(Intent.ACTION_SEND).also {
-                    it.putExtra(Intent.EXTRA_TEXT, article.url)
-                    it.type = "text/plain"
-                    if (it.resolveActivity(context.packageManager) != null) {
-                        context.startActivity(it)
-                    }
-                }
+                detailsViewModel.onShareClick(url = article.url, context = context)
             },
             onBookMarkClick = {
-                detailsViewModel.upsertOrDeleteArticle(article = article)
+                detailsViewModel.onBookmarkClick(article = article)
             },
             onBackClick = {
-                navController.popBackStack()
+                onBackClick()
             }
         )
         LazyColumn(

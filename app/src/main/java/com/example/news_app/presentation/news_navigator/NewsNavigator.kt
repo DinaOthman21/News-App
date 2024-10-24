@@ -144,7 +144,7 @@ fun NewsNavigator() {
                         DetailsScreen(
                             article = article,
                             detailsViewModel = detailsViewModel,
-                            navController = navController
+                            onBackClick = {navController.popBackStack()}
                         )
                     }
             }
