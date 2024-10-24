@@ -21,6 +21,8 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.news_app.domain.model.Article
+import com.example.news_app.presentation.bookmark.BookmarkScreen
+import com.example.news_app.presentation.bookmark.BookmarkViewModel
 import com.example.news_app.presentation.details.DetailsScreen
 import com.example.news_app.presentation.details.DetailsViewModel
 import com.example.news_app.presentation.home.ArticleListViewModel
@@ -97,16 +99,19 @@ fun NewsNavigator() {
             startDestination = Screens.HomeScreen.route,
             modifier = Modifier.padding(bottom = bottomPadding)
         ) {
+
             composable(route = Screens.HomeScreen.route) { _ ->
                 val articleListViewModel : ArticleListViewModel = hiltViewModel()
                 HomeScreen(
                     articleListViewModel = articleListViewModel ,
-                    navController = navController ,
                     onItemClick = { article->
                         navigateToDetails(
                             navController = navController ,
                             article = article
                         )
+                    } ,
+                    onSearchClick = {
+                        navController.navigate(Screens.SearchScreen.route)
                     }
                 )
             }
@@ -145,7 +150,17 @@ fun NewsNavigator() {
             }
 
             composable(route = Screens.BookMarkScreen.route) {
-
+                val bookmarkViewModel: BookmarkViewModel = hiltViewModel()
+                val state = bookmarkViewModel.state.value
+                BookmarkScreen(
+                    state = state ,
+                    onItemClick = {article->
+                        navigateToDetails(
+                            navController = navController ,
+                            article = article
+                        )
+                    }
+                )
             }
 
         }

@@ -22,10 +22,8 @@ import androidx.compose.ui.unit.sp
 import com.example.news_app.R
 import com.example.news_app.presentation.Dimens.MediumPadding1
 import com.example.news_app.presentation.common.SearchBar
-import com.example.news_app.presentation.navigation.Screens
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.navigation.NavHostController
 import com.example.news_app.domain.model.Article
 import com.example.news_app.presentation.common.ArticlesList
 
@@ -33,8 +31,8 @@ import com.example.news_app.presentation.common.ArticlesList
 @Composable
 fun HomeScreen(
     articleListViewModel: ArticleListViewModel,
-    navController : NavHostController,
-    onItemClick:(Article) -> Unit
+    onItemClick:(Article) -> Unit ,
+    onSearchClick : () -> Unit
 ) {
 
     val articleState =articleListViewModel.articleListState.collectAsState().value
@@ -74,7 +72,7 @@ fun HomeScreen(
             readOnly = true,
             onValueChange = {},
             onClick = {
-                navController.navigate(Screens.SearchScreen.route)
+                onSearchClick()
             },
             onSearch = {}
         )
