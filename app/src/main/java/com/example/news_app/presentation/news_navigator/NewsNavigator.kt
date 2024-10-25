@@ -144,7 +144,10 @@ fun NewsNavigator() {
                         DetailsScreen(
                             article = article,
                             detailsViewModel = detailsViewModel,
-                            onBackClick = {navController.popBackStack()}
+                            onBackClick = {
+                               navController.previousBackStackEntry?.savedStateHandle?.remove<Article>("article")
+                                navController.popBackStack()
+                            }
                         )
                     }
             }
@@ -172,9 +175,7 @@ fun NewsNavigator() {
 private fun navigateToTab(navController: NavController, route: String) {
     navController.navigate(route) {
         navController.graph.startDestinationRoute?.let { screenRoute ->
-            popUpTo(screenRoute) {
-                saveState = true
-            }
+            popUpTo(screenRoute) { saveState = true }
             restoreState = true
             launchSingleTop = true
         }
@@ -183,8 +184,10 @@ private fun navigateToTab(navController: NavController, route: String) {
 
 private fun navigateToDetails(navController: NavController, article: Article) {
     navController.currentBackStackEntry?.savedStateHandle?.set("article", article)
-    navController.navigate(
-        route = Screens.DetailsScreen.route
-    )
+    navController.navigate(route = Screens.DetailsScreen.route){
+         launchSingleTop = true
+    }
+
+
 }
 
