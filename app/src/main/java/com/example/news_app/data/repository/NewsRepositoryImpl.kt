@@ -34,15 +34,15 @@ class NewsRepositoryImpl @Inject constructor(
                 )
             } catch (e:IOException){
                 e.printStackTrace()
-                emit(Resource.Error(message = "Loading Error"))
+                emit(Resource.Error(message = "Loading Error" , throwable = e))
                 return@flow
             } catch (e : HttpException){
                 e.printStackTrace()
-                emit(Resource.Error(message = "Loading Error"))
+                emit(Resource.Error(message = "Loading Error" , throwable = e))
                 return@flow
             } catch (e : Exception){
                 e.printStackTrace()
-                emit(Resource.Error(message = "Loading Error"))
+                emit(Resource.Error(message = "Loading Error" , throwable = e))
                 return@flow
             }
             val articles = articleListFromApiService.articles.let {

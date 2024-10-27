@@ -2,6 +2,7 @@ package com.example.news_app.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.LoadState
 import com.example.news_app.domain.repository.NewsRepository
 import com.example.news_app.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -42,7 +43,8 @@ class ArticleListViewModel @Inject constructor(
                 when(result) {
                     is Resource.Error -> {
                         _articleListState.update {
-                            it.copy(isLoading = false)
+                            it.copy(isLoading = false,
+                                error = LoadState.Error(result.throwable ?: Throwable("Unknown Error")))
                         }
                     }
                     is Resource.Loading -> {

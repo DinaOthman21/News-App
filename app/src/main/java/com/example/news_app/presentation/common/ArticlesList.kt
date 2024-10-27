@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.paging.LoadState
 import com.example.news_app.domain.model.Article
 import com.example.news_app.presentation.Dimens.ExtraSmallPadding2
 import com.example.news_app.presentation.Dimens.MediumPadding1
@@ -20,10 +21,11 @@ fun ArticlesList(
     articles: List<Article>,
     onPaginate: () -> Unit,
     isLoading: Boolean ,
-    onClick:(Article) -> Unit
+    onClick:(Article) -> Unit ,
+    error: LoadState.Error? = null
 ) {
     if (articles.isEmpty() && !isLoading) {
-        EmptyScreen()
+        EmptyScreen(error = error)
     }
     else {
         LazyColumn(

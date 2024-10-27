@@ -93,7 +93,8 @@ fun HomeScreen(
             isLoading = articleState.isLoading ,
             onClick = {
                 onItemClick(it)
-            }
+            } ,
+            error = articleState.error
         )
     }
 
