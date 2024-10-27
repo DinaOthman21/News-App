@@ -46,7 +46,8 @@ fun SearchScreen(
                 } ,
                 onClick = {
                     onItemClick(it)
-                }
+                } ,
+                error = searchState.error
             )
         }
 

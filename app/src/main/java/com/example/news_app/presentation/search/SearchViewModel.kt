@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import androidx.compose.runtime.State
 import androidx.lifecycle.viewModelScope
+import androidx.paging.LoadState
 import com.example.news_app.util.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
@@ -45,7 +46,8 @@ class SearchViewModel @Inject constructor(
                 when(result){
                     is Resource.Error -> {
                         _state.value=_state.value.copy(
-                            isLoading = false
+                            isLoading = false ,
+                            error = LoadState.Error(result.throwable ?: Throwable("Unknown Error"))
                         )
                     }
                     is Resource.Loading -> {
